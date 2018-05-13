@@ -12,7 +12,7 @@
   </pre>
 * output
   ==========
-  -> 为webpack指定输出的bundles文件位置（默认为./dist）
+  -> 为webpack指定输出的bundles文件位置（默认为`./dist`）
   <pre>
   <code>
     const path = require('path');
@@ -20,6 +20,7 @@
       entry: './src/entry/index.js',
       output: {
         path: path.resolve(__dirname, 'dist'),
+        // path.resolve('/foo/bar/', 'dist') -> /foo/bar/dist
         filename: 'index.bundle.js'
       }
     }
@@ -67,3 +68,11 @@
     module.exports = config;
   </code>
   </pre>
+* mode 
+  =====
+  -> 通过选择`development`或`production`之中的一个，来设置`mode`参数，可以启用相应模式下的webpack内置优化
+  <pre><code>
+    module.exports = {
+      mode: 'production'
+    }
+  </code></pre>
