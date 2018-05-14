@@ -1,15 +1,13 @@
 # 核心概念
-=============
+
 * entry
 
   -> 为webpack指定一个模块作为构建内部依赖图的开始
-  <pre>
-  <code>
+  ```
     module.exports = {
       entry: './src/entry/index.js'
     }
-  </code>
-  </pre>
+  ```
 * output
 
   -> 为webpack指定输出的bundles文件位置（默认为`./dist`）
