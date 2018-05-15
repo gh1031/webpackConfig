@@ -5,7 +5,7 @@ import icon from '../assets/user.jpg';
 function component () {
   var element = document.createElement('div');
   element.id = 'box';
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+  element.innerHTML = _.join(['Hello', 'webpack', ], ' ');
   var myIcon = new Image();
   console.log(icon);
   myIcon.src = icon;
