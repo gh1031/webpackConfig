@@ -3,8 +3,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 清除上次构建的文件夹
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-// 用于将css用主引用程序中分离
+// 用于将css用主引用程序中分离, but the webpack of version 4.x not support this plugin
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// webpack4 将css从主程序中分离
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 const config = {
@@ -17,7 +19,7 @@ const config = {
   devServer: {
     host: '127.0.0.1', //默认localhost，指定后服务器外部可访问
     port: 9000,
-    // hot: true, //开启热更新
+    hot: true, //开启热更新
     open: true, //自动用浏览器打开
     // proxy: {
     //   //启用反向代理
@@ -32,11 +34,13 @@ const config = {
   },
   module: {
     rules: [
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.css$/, use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'] },
       { test: /\.(jpg|gif|svg|png)$/, use: ['file-loader'] }
     ]
   },
   plugins: [
+    new webpack.NamedChunksPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: 'Auto generate',
       filename: 'index.html', //'index.html'...
@@ -49,7 +53,10 @@ const config = {
       xhtml: true, //true ? 标签自关闭
     }),
     new CleanWebpackPlugin(['dist']),
-    new ExtractTextPlugin('index.css')
+    // new ExtractTextPlugin('index.css')
+    new MiniCssExtractPlugin({
+      filename: 'index.css'
+    })
   ]
 }
 
