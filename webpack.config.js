@@ -10,10 +10,19 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 const config = {
+  // mode: 'production | development',
   entry: './src/js/index.js',
+  // entry: ['./src/js/index.js', './src/js/main.js'],
+  // entry: {
+  //   index: './src/js/index.js',
+  //   main: './src/js/main.js'
+  // },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js'
+    path: path.resolve(__dirname, 'dist/static'),
+    // filename: 'index.js',
+    filename: '[name].[hash].js', // for multiple entry points
+    // filename: '[hash].js',
+    publicPath: '/static/',
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -34,9 +43,41 @@ const config = {
   },
   module: {
     rules: [
-      { test: /\.css$/, use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'] },
-      { test: /\.(jpg|gif|svg|png)$/, use: ['file-loader'] }
-    ]
+      {
+        test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],  //test and include have the same behavior, both must be matched
+        exclude: [
+          path.resolve(__dirname, 'node_modules/')
+        ],  // exclude must not matched
+        issure:  { test, include, exclude }, // TODO understand
+        use: ['babel-loader'],
+        options: { // options for the loader
+          presets: ['es2015'],
+        }, 
+      },
+      { 
+        test: /\.css$/, 
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      { 
+        test: /\.(jpg|gif|svg|png)$/,
+        use: ['file-loader'] 
+      }
+    ],
+  },
+  resolve: { // 解决模块请求的选项
+    modules: [ // 从哪些文件夹寻找模块
+      "node_modules",
+      path.resolve(__dirname, 'src')
+    ],
+    extensions: ['.js', '.json', '.jsx', '.css'],
+    alias: { // 目录别名
+      'module': 'new module',
+      // alias 'module/path/file' -> 'new module/path/file'
+      'src': path.resolve(__dirname, 'src/'), 
+    },
   },
   plugins: [
     new webpack.NamedChunksPlugin(),
@@ -60,6 +101,5 @@ const config = {
   ]
 }
 
-console.log(config);
 
 module.exports = config;
